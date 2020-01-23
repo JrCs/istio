@@ -33,6 +33,10 @@ import logging
 import requests
 import os
 import asyncio
+from kafka import KafkaProducer
+import argparse
+import time
+import datetime
 
 # These two lines enable debugging at httplib level (requests->urllib3->http.client)
 # You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
@@ -160,6 +164,9 @@ def trace():
     return decorator
 
 
+kafka_producer = None
+
+
 def getForwardHeaders(request):
     headers = {}
 
@@ -261,6 +268,13 @@ def health():
 @app.route('/login', methods=['POST'])
 def login():
     user = request.values.get('username')
+    if kafka_producer is not None:
+        kafka_producer.send('authaudit', json.dumps({
+            'event': 'login',
+            'user': user,
+            'remote_addr': request.remote_addr,
+            'timestamp': datetime.datetime.utcnow().isoformat()
+        }))
     response = app.make_response(redirect(request.referrer))
     session['user'] = user
     return response
@@ -268,6 +282,14 @@ def login():
 
 @app.route('/logout', methods=['GET'])
 def logout():
+    user = request.cookies.get("user", "")
+    if user and kafka_producer is not None:
+        kafka_producer.send('authaudit', json.dumps({
+            'event': 'logout',
+            'user': user,
+            'remote_addr': request.remote_addr,
+            'timestamp': datetime.datetime.utcnow().isoformat()
+        }))
     response = app.make_response(redirect(request.referrer))
     session.pop('user', None)
     return response
@@ -419,11 +441,20 @@ class Writer(object):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        logging.error("usage: %s port" % (sys.argv[0]))
-        sys.exit(-1)
+    parser = argparse.ArgumentParser(description='Bookinfo Product Page.')
+    parser.add_argument('--kafka-bootstrap-server', help='Kafka bootstrap server',
+                        metavar='SERVER[:PORT]')
+    parser.add_argument('port', help='listen port', type=int, metavar='PORT')
 
-    p = int(sys.argv[1])
+    args = parser.parse_args()
+    if args.kafka_bootstrap_server:
+        print "enable Kafka audit log using bootstrap server %s" % (args.kafka_bootstrap_server,)
+        while kafka_producer is None:
+            try:
+                kafka_producer = KafkaProducer(bootstrap_servers=args.kafka_bootstrap_server)
+            except BaseException:
+                time.sleep(3)
+    p = args.port
     logging.info("start at port %s" % (p))
     # Python does not work on an IPv6 only host
     # https://bugs.python.org/issue10414
