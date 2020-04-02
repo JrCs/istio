@@ -828,6 +828,9 @@ message PortsConfig {
 
 // Configuration for Proxy.
 message ProxyConfig {
+  // Enable Cilium integration for proxy
+  google.protobuf.BoolValue enableCilium = 99;
+
   string autoInject = 4;
 
   // Domain for the cluster, default: "cluster.local".
@@ -914,6 +917,10 @@ enum tracer {
 message ProxyInitConfig {
   // Specifies the image for the proxy_init container.
   string image = 1;
+
+  // Specifies the DNS name to lookup up in an init container to make sure networking and DNS are functional.
+  string dnsProbe = 99;
+
   // K8s resources settings.
   //
   // See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container

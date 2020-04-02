@@ -13,6 +13,23 @@
       {{- if .Values.global.meshID }}
       meshId: {{ .Values.global.meshID }}
       {{- end }}
+      #
+      # The mode used to redirect inbound connections to Envoy. This setting
+      # has no effect on outbound traffic: iptables REDIRECT is always used for
+      # outbound connections.
+      # If "REDIRECT", use iptables REDIRECT to NAT and redirect to Envoy.
+      # The "REDIRECT" mode loses source addresses during redirection.
+      # If "TPROXY", use iptables TPROXY to redirect to Envoy.
+      # The "TPROXY" mode preserves both the source and destination IP
+      # addresses and ports, so that they can be used for advanced filtering
+      # and manipulation.
+      # The "TPROXY" mode also configures the sidecar to run with the
+      # CAP_NET_ADMIN capability, which is required to use TPROXY.
+      {{- if .Values.global.proxy.enableCilium }}
+      interceptionMode: TPROXY
+      {{- else }}
+      #interceptionMode: TPROXY
+      {{- end }}
       tracing:
       {{- if eq .Values.global.proxy.tracer "lightstep" }}
         lightstep:
