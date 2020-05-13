@@ -1024,7 +1024,7 @@ spec:
         fsGroup: 1337
       containers:
         - name: discovery
-          image: "docker.io/istio/pilot:1.10.6"
+          image: "quay.io/cilium/istio_pilot:1.10.6"
           args:
           - "discovery"
           - --monitoringAddr=:15014

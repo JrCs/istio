@@ -13,7 +13,7 @@ pilot:
   tag: ""
 
   # Can be a full hub/image:tag
-  image: docker.io/istio/pilot:1.10.6
+  image: quay.io/cilium/istio_pilot:1.10.6
   traceSampling: 1.0
 
   # Resources for a small pilot install
@@ -297,7 +297,7 @@ global:
   priorityClassName: ""
 
   proxy:
-    image: docker.io/istio/proxyv2:1.10.6
+    image: quay.io/cilium/istio_proxy:1.10.6
 
     # This controls the 'policy' in the sidecar injector.
     autoInject: enabled
@@ -364,7 +364,7 @@ global:
 
   proxy_init:
     # Base name for the proxy_init container, used to configure iptables.
-    image: docker.io/istio/proxyv2:1.10.6
+    image: quay.io/cilium/istio_proxy:1.10.6
     resources:
       limits:
         cpu: 2000m
