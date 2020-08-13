@@ -21,6 +21,7 @@ import (
 	"istio.io/istio/pilot/pkg/networking/plugin"
 	"istio.io/istio/pilot/pkg/networking/plugin/authn"
 	"istio.io/istio/pilot/pkg/networking/plugin/authz"
+	"istio.io/istio/pilot/pkg/networking/plugin/cilium"
 	"istio.io/istio/pilot/pkg/networking/plugin/metadataexchange"
 )
 
@@ -30,6 +31,7 @@ var availablePlugins = map[string]plugin.Plugin{
 	plugin.Authn:            authn.NewPlugin(),
 	plugin.Authz:            authz.NewPlugin(authz.Local),
 	plugin.MetadataExchange: metadataexchange.NewPlugin(),
+	plugin.Cilium:           cilium.NewPlugin(),
 }
 
 // NewPlugins returns a slice of default Plugins.

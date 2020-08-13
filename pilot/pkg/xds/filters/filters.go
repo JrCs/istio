@@ -37,6 +37,7 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	"istio.io/istio/pilot/pkg/features"
+	"istio.io/istio/pilot/pkg/networking/plugin/cilium"
 	"istio.io/istio/pilot/pkg/networking/util"
 	alpn "istio.io/istio/pkg/envoy/config/filter/http/alpn/v2alpha1"
 )
@@ -155,6 +156,13 @@ var (
 	}
 
 	HTTPMx = buildHTTPMxFilter()
+
+	CiliumBpfMetadataIngressFilter = &listener.ListenerFilter{
+		Name: cilium.CiliumBpfMetadata,
+		ConfigType: &listener.ListenerFilter_TypedConfig{
+			TypedConfig: util.MessageToAny(&cilium.BpfMetadata{IsIngress: true}),
+		},
+	}
 )
 
 var (
