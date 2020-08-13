@@ -58,3 +58,5 @@ var/
 ._*
 # MacOS Desktop Services Store
 .DS_Store
+# Cilium artifacts
+cilium-istioctl-*
