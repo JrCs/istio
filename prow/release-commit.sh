@@ -28,7 +28,7 @@ setup_gcloud_credentials
 # Old prow image does not set this, so needed explicitly here as this is not called through make
 export GO111MODULE=on
 
-DOCKER_HUB=${DOCKER_HUB:-gcr.io/istio-testing}
+DOCKER_HUB=${DOCKER_HUB:-docker.io/istio}
 GCS_BUCKET=${GCS_BUCKET:-istio-build/dev}
 
 # Use a pinned version in case breaking changes are needed

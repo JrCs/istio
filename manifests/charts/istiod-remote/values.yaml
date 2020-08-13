@@ -11,7 +11,7 @@ pilot:
   hub: ""
   tag: ""
   # Can be a full hub/image:tag
-  image: pilot
+  image: docker.io/istio/pilot:1.10.6
   traceSampling: 1.0
   # Resources for a small pilot install
   resources:
@@ -257,7 +257,7 @@ global:
   # for more detail.
   priorityClassName: ""
   proxy:
-    image: proxyv2
+    image: docker.io/istio/proxyv2:1.10.6
     # This controls the 'policy' in the sidecar injector.
     autoInject: enabled
     # CAUTION: It is important to ensure that all Istio helm charts specify the same clusterDomain value
@@ -308,7 +308,7 @@ global:
     holdApplicationUntilProxyStarts: false
   proxy_init:
     # Base name for the proxy_init container, used to configure iptables.
-    image: proxyv2
+    image: docker.io/istio/proxyv2:1.10.6
     resources:
       limits:
         cpu: 2000m

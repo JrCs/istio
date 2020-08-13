@@ -16,14 +16,14 @@ spec:
       enabled: false
     pilot:
       enabled: false
-  hub: gcr.io/istio-testing
+  hub: docker.io/istio
 
   meshConfig:
     defaultConfig:
       proxyMetadata: {}
     enablePrometheusMerge: true
   profile: default
-  tag: latest
+  tag: 1.10.6
   values:
     base:
       enableCRDTemplates: false
