@@ -562,7 +562,7 @@ func (iptConfigurator *IptablesConfigurator) run() {
 			"-p", constants.TCP, "-m", "connmark", "--mark", iptConfigurator.cfg.InboundTProxyMark, "-j", "CONNMARK", "--restore-mark")
 		// prevent infinite redirect
 		iptConfigurator.iptables.InsertRuleV4(constants.ISTIOINBOUND, constants.MANGLE, 1,
-			"-p", constants.TCP, "-m", "mark", "--mark", iptConfigurator.cfg.InboundTProxyMark, "-j", constants.RETURN)
+			"-i", "lo", "-p", constants.TCP, "-j", constants.RETURN)
 	}
 	iptConfigurator.executeCommands()
 }

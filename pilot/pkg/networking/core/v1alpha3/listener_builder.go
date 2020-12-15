@@ -186,10 +186,6 @@ func (lb *ListenerBuilder) aggregateVirtualInboundListener(passthroughInspectors
 	lb.virtualInboundListener.ListenerFilters = append(lb.virtualInboundListener.ListenerFilters,
 		xdsfilters.OriginalDestination,
 	)
-	if lb.node.GetInterceptionMode() == model.InterceptionTproxy {
-		lb.virtualInboundListener.ListenerFilters =
-			append(lb.virtualInboundListener.ListenerFilters, xdsfilters.OriginalSrc)
-	}
 	// TODO: Trim the inboundListeners properly. Those that have been added to filter chains should
 	// be removed while those that haven't been added need to remain in the inboundListeners list.
 	filterChains, inspectors := reduceInboundListenerToFilterChains(lb.inboundListeners)

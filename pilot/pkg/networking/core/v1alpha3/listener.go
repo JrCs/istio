@@ -1376,11 +1376,6 @@ func buildListener(opts buildListenerOpts, trafficDirection core.TrafficDirectio
 		}
 	}
 
-	if opts.proxy.GetInterceptionMode() == model.InterceptionTproxy && trafficDirection == core.TrafficDirection_INBOUND {
-		listenerFiltersMap[xdsfilters.OriginalSrcFilterName] = true
-		listenerFilters = append(listenerFilters, xdsfilters.OriginalSrc)
-	}
-
 	// We add a TLS inspector when http inspector is needed for outbound only. This
 	// is because if we ever set ALPN in the match without
 	// transport_protocol=raw_buffer, Envoy will automatically inject a tls
