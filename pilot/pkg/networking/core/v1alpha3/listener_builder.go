@@ -643,6 +643,7 @@ func (configgen *ConfigGeneratorImpl) buildInboundFilterchains(in *plugin.InputP
 		fcs = append(fcs, o.fc)
 	}
 	mutable := &istionetworking.MutableObjects{
+		Listener:     &listener.Listener{}, // Allows plugins to add ListenerFilters
 		FilterChains: fcs,
 	}
 	for _, p := range configgen.Plugins {
@@ -684,6 +685,7 @@ func (configgen *ConfigGeneratorImpl) buildInboundFilterchains(in *plugin.InputP
 			fcOpt.filterChainName = virtualInboundCatchAllHTTPFilterChainName
 		}
 		fcOpt.filterChain = opt.fc
+		fcOpt.listenerFilters = mutable.Listener.ListenerFilters
 		fcOpts = append(fcOpts, fcOpt)
 	}
 	return fcOpts
